@@ -555,11 +555,11 @@
             this.btnSalir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.btnSalir.Font = new System.Drawing.Font("Microsoft PhagsPa", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSalir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.btnSalir.Location = new System.Drawing.Point(1037, 691);
+            this.btnSalir.Location = new System.Drawing.Point(1028, 686);
             this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(129, 38);
+            this.btnSalir.Size = new System.Drawing.Size(138, 43);
             this.btnSalir.TabIndex = 55;
-            this.btnSalir.Text = "SALIR";
+            this.btnSalir.Text = "HOME";
             this.btnSalir.UseVisualStyleBackColor = false;
             this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
             // 
@@ -575,7 +575,7 @@
             this.Controls.Add(this.tabControl1);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.Name = "FrmPrincipal";
-            this.Text = "FrmPrincipal";
+            this.Text = "FrmAlumnos";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

@@ -11,7 +11,7 @@ namespace EjercicioCuatro
     {
         static void Main(string[] args)
         {
-            Application.Run(new FrmPrincipal());
+            Application.Run(new FrmInicio());
         }
     }
 }
