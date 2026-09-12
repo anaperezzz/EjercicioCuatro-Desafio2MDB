@@ -38,6 +38,9 @@ namespace EjercicioCuatro
             textedad1.Visible = false;
             textdireccion1.Visible = false;
             modificar1.Visible = false;
+            btnEliminar.Visible = false;
+
+            CargarDatos();
         }
 
         private void buscar1_Click(object sender, EventArgs e)
@@ -104,6 +107,7 @@ namespace EjercicioCuatro
                 textdireccion2.Text = "";
 
                 MessageBox.Show("Registro agregado exitosamente");
+                CargarDatos();
             }
             catch (Exception ex)
             {
@@ -120,6 +124,7 @@ namespace EjercicioCuatro
             textedad1.Visible = true;
             textdireccion1.Visible = true;
             modificar1.Visible = true;
+            btnEliminar.Visible = true;
 
             string seleccion;
             seleccion = "Select * From Alumno where CodigoAlumno = '" + textcod1.Text + "'";
@@ -167,6 +172,7 @@ namespace EjercicioCuatro
 
             MessageBox.Show("REGISTRO ACTUALIZADO");
             Reset();
+            CargarDatos();
         }
         private void Reset()
         {
@@ -185,16 +191,96 @@ namespace EjercicioCuatro
             textedad1.Visible = false;
             textdireccion1.Visible = false;
             modificar1.Visible = false;
+            btnEliminar.Visible = false;
+        }
+        private void CargarDatos()
+        {
+            try
+            {
+                using (SqlConnection connGrid = new SqlConnection(sCn))
+                {
+                    connGrid.Open();
+                    string query = "SELECT * FROM Alumno";
+                    SqlDataAdapter daGrid = new SqlDataAdapter(query, connGrid);
+                    DataTable dtGrid = new DataTable();
+                    daGrid.Fill(dtGrid);
+
+                    dataGridView1.DataSource = dtGrid;
+                    EstilizarGrid();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar la tabla: " + ex.Message);
+            }
         }
 
-        private void label17_Click(object sender, EventArgs e)
+        private void EstilizarGrid()
         {
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 244, 248);
 
+            // Renombrar encabezados (siempre y cuando las columnas existan)
+            if (dataGridView1.Columns["CodigoAlumno"] != null)
+            {
+                dataGridView1.Columns["CodigoAlumno"].HeaderText = "Carnet";
+                dataGridView1.Columns["PrimerNombre"].HeaderText = "1er Nombre";
+                dataGridView1.Columns["SegundoNombre"].HeaderText = "2do Nombre";
+                dataGridView1.Columns["PrimerApellido"].HeaderText = "1er Apellido";
+                dataGridView1.Columns["SegundoApellido"].HeaderText = "2do Apellido";
+                dataGridView1.Columns["Edad"].HeaderText = "Edad";
+                dataGridView1.Columns["Direccion"].HeaderText = "Dirección";
+            }
         }
 
-        private void buscar2_Click(object sender, EventArgs e)
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textcod1.Text))
+                {
+                    MessageBox.Show("Por favor, ingresa o busca el código del alumno que deseas eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+                DialogResult resultado = MessageBox.Show("¿Estás seguro de eliminar este registro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (resultado == DialogResult.Yes)
+                {
+                    string queryDelete = "DELETE FROM Alumno WHERE CodigoAlumno = @codigo";
+                    using (SqlCommand cmdDelete = new SqlCommand(queryDelete, conn))
+                    {
+                        cmdDelete.Parameters.AddWithValue("@codigo", textcod1.Text.Trim());
+                        int filas = cmdDelete.ExecuteNonQuery();
+
+                        if (filas > 0)
+                        {
+                            MessageBox.Show("Registro eliminado exitosamente.");
+                            Reset();
+                            CargarDatos(); // Actualiza la tabla automáticamente
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se encontró ningún alumno con ese código.");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar: " + ex.Message);
+            }
+        }
+
+        private void btnActualizarTabla_Click(object sender, EventArgs e)
+        {
+            CargarDatos();
+            MessageBox.Show("Tabla actualizada correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
